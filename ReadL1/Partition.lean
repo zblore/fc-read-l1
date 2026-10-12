@@ -52,8 +52,11 @@ inductive Kind
 /-- A block `Jₙ,ᵣ`, `Iₙ,ᵣ`, `Lₙ,ᵣ` or `Kₙ,ᵣ`. -/
 @[ext]
 structure Block where
+  /-- The level `n`. -/
   n : ℕ
+  /-- The position `r` within the level, `1 ≤ r < n`. -/
   r : ℕ
+  /-- Which of `J`, `I`, `L`, `K` the block is. -/
   kind : Kind
 
 /-- `i` lies in the block `B` (with `n > r ≥ 1`). -/

@@ -16,7 +16,10 @@ The heart is `ReadL1.exists_aeval_near_delta`: for `0 < ‖e‖ ≤ 1` and `δ >
 `f` has `‖f(T) e - x⁰‖ < δ`. Śliwa's proof: take `k > 2` with `6aₖ₋₁⁻¹ < δ`, `m` from Lemma 5,
 `y = Qₘ e`, `q` from Lemma 6 (with `ε = (aₘAₘ)⁻¹`, `M = Aₘ`) and `f = bₘ⁻¹ x^{aₘ+bₘ} q`; then
 
-`f(T)e - x⁰ = (f(T)e - z) + (z - Pₐz) + (Pₐz - P꜀t) + (P꜀t - x^{(m-k+1)aₘ}) + (x^{(m-k+1)aₘ} - x⁰)`
+```
+f(T)e - x⁰ = (f(T)e - z) + (z - P_a z) + (P_a z - P_c t)
+    + (P_c t - x^{(m-k+1)aₘ}) + (x^{(m-k+1)aₘ} - x⁰)
+```
 
 with `z = f y`, `t = x^{aₘ} q y`, `a = (m - 1)aₘ + bₘ`, `c = (m - 1)aₘ`, and the five terms are
 below `aₘ⁻¹`, `aₘ⁻¹`, `aₘ⁻¹`, `aₘ⁻¹`, `2aₖ₋₁⁻¹` ((S1)–(S5)).
