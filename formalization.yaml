@@ -1,0 +1,108 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+
+version: "v0.4"
+
+project:
+  name: "fc-read-l1"
+  description: >-
+    A machine-checked proof that there is a bounded operator on ℓ¹ with no nontrivial closed
+    invariant subspace (Read's theorem), following Śliwa's explicit version, against the
+    definitions of Formal Conjectures' invariant subspace problem file.
+  authors:
+    - "Zayn Blore"
+  license: "Apache-2.0"
+
+sources:
+  - title: "An explicit example concerning the invariant subspace problem for Banach spaces"
+    authors:
+      - "Wiesław Śliwa"
+    id: "https://repozytorium.amu.edu.pl/items/e294df26-caa3-435c-8165-0e5c940fa070"
+    type: "paper"
+    location: "Rocky Mountain J. Math. 40 (2010) 627–641, Lemmas 1–6 and Theorem 7"
+    relationship: "formalizes"
+    author_endorsement: "n/a"
+  - title: "A solution to the invariant subspace problem on the space l1"
+    authors:
+      - "Charles J. Read"
+    id: "https://doi.org/10.1112/blms/17.4.305"
+    type: "paper"
+    location: "Bull. London Math. Soc. 17 (1985) 305–317"
+    relationship: "related"
+    author_endorsement: "n/a"
+
+related_formalizations:
+  - id: "https://github.com/google-deepmind/formal-conjectures/blob/40a8592cb6f7e96cb9a8275d96bb3e013feeb1dc/FormalConjectures/Wikipedia/InvariantSubspaceProblem.lean"
+    relationship: "builds-on"
+    note: >-
+      Supplies the statement `InvariantSubspaceProblem.Invariant_subspace_problem_l1` and the
+      structure `ClosedInvariantSubspace` it uses. This repository depends on Formal Conjectures
+      at that commit and proves the same proposition without using the declaration left as
+      `sorry` there.
+
+classification:
+  arxiv:
+    - "math.FA"
+  msc2020:
+    - "47A15"
+    - "47B37"
+
+automation:
+  methods:
+    - method: "agent"
+      models:
+        - "Claude Opus 5.5"
+      framework: "Claude Code"
+  notes: "I drafted the Lean with Claude Code."
+
+review:
+  status: "author-verified"
+  reviewers:
+    - "Zayn Blore"
+  notes: >-
+    Checks run: statement term-identical to Formal Conjectures' `Invariant_subspace_problem_l1`;
+    axioms limited to propext, Classical.choice and Quot.sound; the operator is shown to be
+    nonzero; every declaration is used; `lake build` with Mathlib's standard linter set passes;
+    the audits in `audit/` pass.
+
+status:
+  scope: >-
+    Full proof of the single Formal Conjectures statement `Invariant_subspace_problem_l1`.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms:
+    - "propext"
+    - "Classical.choice"
+    - "Quot.sound"
+  main_results:
+    - description: >-
+        There is a bounded operator on ℓ¹(ℕ, ℂ) with no nontrivial closed invariant subspace.
+      declaration: "ReadL1.invariant_subspace_problem_l1"
+      file: "ReadL1/Main.lean"
+      sorry_count: 0
+      axioms:
+        - "propext"
+        - "Classical.choice"
+        - "Quot.sound"
+
+fidelity:
+  divergences: >-
+    None in the statement, which is Formal Conjectures' own. The proof follows Śliwa's paper
+    lemma by lemma, with α fixed at 8, exact constants where the paper rounds, the bound on
+    the polynomial Qₘe obtained through the basis rather than through Śliwa's √Aₘ · √Aₘ, and
+    one concrete growth sequence (each term after the first a power 8^{2s}).
+
+alignment:
+  namespaces:
+    - "ReadL1"
+  statements:
+    - source: "Formal Conjectures, InvariantSubspaceProblem.Invariant_subspace_problem_l1"
+      lean: "ReadL1.invariant_subspace_problem_l1"
+      module: "ReadL1.Main"
+      status: "proved"
+    - source: "Śliwa 2010, Theorem 7"
+      lean: "ReadL1.theorem7"
+      module: "ReadL1.Theorem7"
+      status: "proved"
+
+acknowledgements: >-
+  Thanks to the authors of Lean 4, Mathlib and Formal Conjectures.
