@@ -12,12 +12,12 @@ I found no earlier formal proof of Read's theorem.
 
 ## The proof
 
-Śliwa builds a basis of the polynomials from a fast-growing integer sequence, lets T be multiplication by x, and shows that the vector 1 can be approximated by p(T)e for every nonzero e. The files follow his paper.
+Śliwa builds a basis of the polynomials from a fast-growing integer sequence, lets T be multiplication by x, and shows that the vector 1 can be approximated by p(T)e for every nonzero e. The files, all in `ReadL1/`, follow his paper.
 
 - `Partition.lean`, `Basis.lean`: the blocks J, I, L, K that cut up the indices, the basis fᵢ, and the operator on finite sequences. `T₀_xPow` proves T is multiplication by x.
 - `Growth.lean`: the inequalities between the sequences that the proofs use, collected as hypotheses (`GrowthHyp`).
 - `Norm.lean`, `Lemma1.lean`, `Lemma2.lean`, `L1Lift.lean`, `Operator.lean`: Lemmas 1 and 2, and the bounded operator on ℓ¹ with ‖T‖ ≤ 8.
-- `Projection.lean`, `Lemma4J/I/L/K.lean`, `Lemma4.lean`: the projection Qₘ and Lemma 4, ‖Tˢ − TˢQₘ‖ ≤ α.
+- `Projection.lean`, `Lemma4J/I/L/K.lean`, `Lemma4.lean`: the projection Qₘ and Lemma 4, ‖Tˢ − TˢQₘ‖ ≤ α, where α = 8 is Śliwa's constant.
 - `PolyNorm.lean`, `Inverse.lean`, `Lemma6.lean`: the coefficient norm and Lemma 6, an approximate inverse of a polynomial with a bounded norm.
 - `Coord.lean`, `QPoly.lean`, `Lemma5Coeff.lean`, `Lemma5Window.lean`, `Lemma5.lean`: Qₘe as a polynomial, and Lemma 5.
 - `Theorem7Prep.lean`, `Theorem7.lean`, `Cyclic.lean`: Theorem 7, that T has no nontrivial closed invariant subspace.
