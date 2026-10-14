@@ -22,11 +22,19 @@ decl_re = (r"^(?:@\[[^\]]*\]\s*)?(?:noncomputable\s+)?"
 declared = set(re.findall(decl_re, "\n".join(src.values()), re.M))
 declared |= set(re.findall(decl_re, fc, re.M))
 problems = []
-# audit/Vacuity.lean skips these suffixes as Lean-generated, so no hand-written name may use them.
+# audit/Vacuity.lean skips some suffixes as Lean-generated (its `generated` list, plus `eq_<n>`),
+# so no hand-written name may use them. The list is read from Vacuity.lean so the two cannot drift.
+vacuity = open(os.path.join(root, "audit", "Vacuity.lean"), encoding="utf-8").read()
+generated_block = re.search(r"let generated : List String :=\s*\[(.*?)\]", vacuity, re.S)
+if generated_block is None:
+    sys.exit("lexical audit: cannot find the `generated` list in audit/Vacuity.lean")
+reserved = set(re.findall(r'"([^"]+)"', generated_block.group(1)))
+if len(reserved) < 10:
+    sys.exit(f"lexical audit: only {len(reserved)} reserved suffixes read from Vacuity.lean")
 for f, s in src.items():
     for name in re.findall(decl_re, s, re.M):
         last = name.split(".")[-1]
-        if re.fullmatch(r"eq_\d+|eq_def|eq_unfold|congr_simp", last):
+        if last in reserved or re.fullmatch(r"eq_\d+", last):
             problems.append(f"{f}: `{name}` uses a suffix reserved for Lean-generated lemmas")
 for f, t in src.items():
     for doc in re.findall(r"/-[-!](.*?)-/", t, re.S):

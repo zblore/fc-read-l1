@@ -21,12 +21,13 @@ I found no earlier formal proof of Read's theorem.
 - `PolyNorm.lean`, `Inverse.lean`, `Lemma6.lean`: the coefficient norm and Lemma 6, an approximate inverse of a polynomial with a bounded norm.
 - `Coord.lean`, `QPoly.lean`, `Lemma5Coeff.lean`, `Lemma5Window.lean`, `Lemma5.lean`: Qₘe as a polynomial, and Lemma 5.
 - `Theorem7Prep.lean`, `Theorem7.lean`, `Cyclic.lean`: Theorem 7, that T has no nontrivial closed invariant subspace.
-- `Explicit.lean`: a concrete sequence satisfying every growth condition. Each term after the first is a power 8^{2s}, so the square roots in Śliwa's conditions are exact.
+- `Explicit.lean`: a concrete sequence satisfying every inequality the proof uses (`Theorem7Hyp`). Each term after the first is a power 8^{2s}, so the square roots in Śliwa's conditions are exact.
 - `Main.lean`: `ReadL1.invariant_subspace_problem_l1`.
 
 Where the formalisation departs from the paper:
 
 - α is fixed at 8 (Śliwa allows any α ≥ 8).
+- The proof assumes only the inequalities it uses (`GrowthHyp`, `Theorem7Hyp`), not Śliwa's growth condition dₙ₊₁ ≥ α^{(n dₙ)!}. The explicit sequence satisfies those inequalities, but not Śliwa's condition at every step.
 - A few of Śliwa's constants are rounded in the paper; the exact ones are used here.
 - The bound |Qₘe| ≤ Aₘ comes from bounding each |fₗ| directly rather than through his √Aₘ · √Aₘ. The resulting bound is the same.
 

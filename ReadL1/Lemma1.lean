@@ -14,10 +14,10 @@ With `Aₘ = α^{√aₘ}` and `Bₘ = α^{√bₘ}`, Śliwa (pp. 629–630) sho
 * `‖xⁱ‖ ≤ Bₘ` for `i ≤ vₘ`,
 
 by induction on `m`: going from `vₘ` up to `m aₘ₊₁` crosses the `J` and `I` blocks of level
-`m + 1`, and from there up to `vₘ₊₁` the `L` and `K` blocks. On a `J` or `L` block `‖xⁱ‖` is
-at most `α^{√c/2}`; on an `I` block Lemma 1 (b) compares `xⁱ` with a power at most `vₘ`; on a `K`
-block with a power at most `m aₘ₊₁`. (The statement holds for `m = 1` too, where both ranges are
-`{0}`.)
+`m + 1`, and from there up to `vₘ₊₁` the `L` and `K` blocks. On a `J` block `‖xⁱ‖` is at most
+`α^{√c/2}` and on an `L` block at most `α^{√c}`; on an `I` block Lemma 1 (b) compares `xⁱ` with
+a power at most `vₘ`; on a `K` block with a power at most `m aₘ₊₁`. (The statement holds for
+`m = 1` too, where both ranges are `{0}`.)
 -/
 
 namespace ReadL1
