@@ -15,7 +15,7 @@ import ReadL1.Partition
 * `fᵢ = aₙ₋ᵣ (xⁱ - x^{i - aₙ})` on `Iₙ,ᵣ`,
 * `fᵢ = xⁱ - bₙ x^{i - bₙ}` on `Kₙ,ᵣ`,
 
-declares `(fᵢ)` orthonormal for an `ℓ¹` norm, and lets `T` multiply by `x`.
+puts `‖∑ cᵢ fᵢ‖ = ∑ |cᵢ|`, and lets `T` multiply by `x`.
 
 We work directly with coordinates in the basis `(fᵢ)`, as finitely supported sequences
 `ℕ →₀ ℂ`, so `fᵢ` is the unit vector `δᵢ`. Solving each line above for `xⁱ` gives `xⁱ` in

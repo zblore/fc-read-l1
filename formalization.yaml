@@ -61,8 +61,8 @@ review:
   notes: >-
     Checks run: statement term-identical to Formal Conjectures' `Invariant_subspace_problem_l1`;
     axioms limited to propext, Classical.choice and Quot.sound; the operator is shown to be
-    nonzero; every declaration is used; `lake build` with Mathlib's standard linter set passes;
-    the audits in `audit/` pass.
+    nonzero; every declaration is reachable from the headline theorem; `lake build` with
+    Mathlib's standard linter set passes; the audits in `audit/` pass.
 
 status:
   scope: >-
@@ -89,7 +89,10 @@ fidelity:
     None in the statement, which is Formal Conjectures' own. The proof follows Śliwa's paper
     lemma by lemma, with α fixed at 8, exact constants where the paper rounds, the bound on
     the polynomial Qₘe obtained through the basis rather than through Śliwa's √Aₘ · √Aₘ, and
-    one concrete growth sequence (each term after the first a power 8^{2s}).
+    one concrete growth sequence (each term after the first a power 8^{2s}). Theorem 7 is
+    proved from the inequalities its proof uses (GrowthHyp, Theorem7Hyp), not from Śliwa's
+    growth condition dₙ₊₁ ≥ α^{(n dₙ)!}; the concrete sequence satisfies those inequalities
+    but not Śliwa's condition at every step.
 
 alignment:
   namespaces:

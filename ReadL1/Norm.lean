@@ -9,7 +9,7 @@ import ReadL1.Growth
 /-!
 # The norm, and Śliwa's Lemma 1 (b)
 
-Śliwa's norm makes the basis `(fᵢ)` orthonormal for `ℓ¹`: in coordinates it is
+Śliwa puts `‖∑ cᵢ fᵢ‖ = ∑ |cᵢ|`, so in coordinates in the basis `(fᵢ)` the norm is
 `‖g‖ = ∑ⱼ |gⱼ|` (`ReadL1.nrm`).
 
 This file proves the facts about `xⁱ` that the boundedness proof (Lemma 2) uses:

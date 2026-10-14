@@ -52,7 +52,7 @@ lake env lean audit/Vacuity.lean
 python audit/lexical.py
 ```
 
-`Audit.lean` checks that the statement is identical to Formal Conjectures' and that only the standard axioms are used, and that the operator is not zero. `Vacuity.lean` checks that every declaration is used. `lexical.py` checks the docstrings, imports and formatting.
+`Audit.lean` checks that the statement is identical to Formal Conjectures' and that only the standard axioms are used, and that the operator is not zero. `Vacuity.lean` checks that every declaration feeds into the headline theorem. `lexical.py` checks the docstrings, imports and formatting.
 
 ## How it was made
 

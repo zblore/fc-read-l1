@@ -22,8 +22,9 @@ decl_re = (r"^(?:@\[[^\]]*\]\s*)?(?:noncomputable\s+)?"
 declared = set(re.findall(decl_re, "\n".join(src.values()), re.M))
 declared |= set(re.findall(decl_re, fc, re.M))
 problems = []
-# audit/Vacuity.lean skips some suffixes as Lean-generated (its `generated` list, plus `eq_<n>`),
-# so no hand-written name may use them. The list is read from Vacuity.lean so the two cannot drift.
+# audit/Vacuity.lean skips some suffixes as Lean-generated (its `generated` list, `eq_<n>` and
+# `match_<n>`), so no hand-written name may use them. The list is read from Vacuity.lean so the
+# two cannot drift.
 vacuity = open(os.path.join(root, "audit", "Vacuity.lean"), encoding="utf-8").read()
 generated_block = re.search(r"let generated : List String :=\s*\[(.*?)\]", vacuity, re.S)
 if generated_block is None:
@@ -34,7 +35,7 @@ if len(reserved) < 10:
 for f, s in src.items():
     for name in re.findall(decl_re, s, re.M):
         last = name.split(".")[-1]
-        if last in reserved or re.fullmatch(r"eq_\d+", last):
+        if last in reserved or re.fullmatch(r"eq_\d+|match_\d+", last):
             problems.append(f"{f}: `{name}` uses a suffix reserved for Lean-generated lemmas")
 for f, t in src.items():
     for doc in re.findall(r"/-[-!](.*?)-/", t, re.S):
