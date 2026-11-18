@@ -39,7 +39,8 @@ public import ReadL1.Theorem7Prep
 /-!
 # Read's counterexample on ℓ¹, for Formal Conjectures
 
-A proof of `InvariantSubspaceProblem.Invariant_subspace_problem_l1` (`ReadL1.Main`): an operator
+A proof of `InvariantSubspaceProblem.Invariant_subspace_problem_l1` (`ReadL1.FormalTarget`, from
+`ReadL1.invariant_subspace_problem_l1` in `ReadL1.Main`): an operator
 on ℓ¹ with no nontrivial closed invariant subspace, following W. Śliwa, Rocky Mountain J. Math. 40
 (2010).
 -/

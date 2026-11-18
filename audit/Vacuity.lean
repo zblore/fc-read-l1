@@ -133,6 +133,6 @@ run_cmd do
   let real := orphans.filter (· != control)
   unless real.isEmpty do
     throwError m!"declarations not reachable from the headline: {real.toList}"
-  unless ours.size ≥ 200 do throwError m!"only {ours.size} declarations found; wrong prefix?"
+  unless ours.size ≥ 429 do throwError m!"only {ours.size} declarations found; wrong prefix?"
   let msg := s!"vacuity audit passed: {ours.size} declarations, all reachable from the headline"
   logInfo m!"{msg}; control ok"

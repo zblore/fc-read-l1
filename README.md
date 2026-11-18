@@ -1,6 +1,6 @@
 # Read's operator on ℓ¹ in Lean
 
-A Lean 4 proof that there is a bounded operator on ℓ¹ with no nontrivial closed invariant subspace. It proves `Invariant_subspace_problem_l1` from the invariant subspace problem file in Google DeepMind's [Formal Conjectures](https://github.com/google-deepmind/formal-conjectures) against their own definitions.
+A Lean 4 proof that there is a bounded operator on ℓ¹ with no nontrivial closed invariant subspace. It proves `Invariant_subspace_problem_l1` from the invariant subspace problem file in Google DeepMind's [Formal Conjectures](https://github.com/google-deepmind/formal-conjectures) against a verbatim copy of their definitions.
 
 ## The result
 
@@ -15,6 +15,7 @@ I found no earlier formal proof of Read's theorem.
 Śliwa builds a basis of the polynomials from a fast-growing integer sequence, lets T be multiplication by x, and shows that the vector 1 can be approximated by p(T)e for every nonzero e. The files, all in `ReadL1/`, follow his paper.
 
 - `Partition.lean`, `Basis.lean`: the blocks J, I, L, K that cut up the indices, the basis fᵢ, and the operator on finite sequences. `T₀_xPow` proves T is multiplication by x.
+- `Poly.lean`: a polynomial's coordinates in the basis fᵢ, so that q(T) multiplies by q.
 - `Growth.lean`: the inequalities between the sequences that the proofs use, collected as hypotheses (`GrowthHyp`).
 - `Norm.lean`, `Lemma1.lean`, `Lemma2.lean`, `L1Lift.lean`, `Operator.lean`: Lemmas 1 and 2, and the bounded operator on ℓ¹ with ‖T‖ ≤ 8.
 - `Projection.lean`, `Lemma4J/I/L/K.lean`, `Lemma4.lean`: the projection Qₘ and Lemma 4, ‖Tˢ − TˢQₘ‖ ≤ α, where α = 8 is Śliwa's constant.
@@ -46,10 +47,10 @@ Formal Conjectures' `formal_proof` link points at commit `57ceaa0`, the earlier 
 
 ## Checks
 
-- `scripts/check-fc-match.py` regenerates Challenge's code from Formal Conjectures at the pinned commit and requires an exact match. It pins the source file by SHA-256, and `--self-test` confirms that 22 altered files fail. This compares text. Formal Conjectures builds with Lean and Mathlib v4.33.1 and this repository with v4.35.0-rc3, and the script doesn't read what that file imports.
+- `scripts/check-fc-match.py` regenerates Challenge's code from Formal Conjectures at the pinned commit and requires an exact match. It pins the source file by SHA-256, and `--self-test` confirms that 22 altered inputs fail: 17 altered Challenge or Defs files, and 5 altered copies of the Formal Conjectures source, which the hash catches. This compares text. Formal Conjectures builds with Lean and Mathlib v4.33.1 and this repository with v4.35.0-rc3, and the script doesn't read what that file imports.
 - `audit/Axioms.lean` uses `#guard_msgs` to require that the main results and key lemmas use only `propext`, `Classical.choice` and `Quot.sound`.
 - `audit/Control.lean` confirms that the audit detects `sorry`, and that the operator is not zero.
-- `audit/Vacuity.lean` checks that every declaration feeds into the headline theorem.
+- `audit/Vacuity.lean` checks that every declaration in the `ReadL1` namespace (429 of them) feeds into the headline theorem `ReadL1.invariant_subspace_problem_l1`.
 - `audit/lexical.py` checks the docstrings, imports and formatting.
 - `scripts/verify-comparator.sh` runs `lake comparator` in CI, which replays the proof through Lean's kernel, nanoda and con-ron.
 

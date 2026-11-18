@@ -182,6 +182,7 @@ def mutations(challenge, defs, fc):
 
 
 def main(argv):
+    sys.stdout.reconfigure(encoding="utf-8")
     self_test = "--self-test" in argv
     printing = "--print-expected" in argv
     args = [a for a in argv if a not in ("--self-test", "--print-expected")]
