@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import FormalConjectures.Wikipedia.InvariantSubspaceProblem
+module
+
+public import ReadL1.Defs
 
 /-!
 # Bounded operators on ℓ¹ from the images of the basis vectors
@@ -23,6 +25,8 @@ We did not find either in Mathlib at the pinned version (searched `Mathlib/Analy
 and `Mathlib/Analysis/InnerProductSpace/l2Space.lean`, which have `lp.evalCLM` and
 `lp.singleContinuousLinearMap` but no operator built from images of the basis vectors).
 -/
+
+@[expose] public section
 
 namespace ReadL1
 

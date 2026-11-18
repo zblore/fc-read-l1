@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Lemma4J
+module
+
+public import ReadL1.Lemma4J
 
 /-!
 # Śliwa's Lemma 4, Case 2 (`I` blocks)
@@ -18,6 +20,8 @@ For `i ∈ Iₙ,ᵣ` above `(m - 1)aₘ` (so `n > m`), `Tˢ fᵢ = aₙ₋ᵣ (x
 * **2.2° (b)** `r < n - m`: either `Tˢ fᵢ = fᵢ₊ₛ`, or `Tˢ fᵢ = T^k (T f_p)` for the last index `p`
   of the block, and Remark 3 gives `‖T f_p‖ ≤ 1/aₙ₋ᵣ` with `aₙ₋ᵣ ≥ aₘ₊₁ ≥ αˢ`.
 -/
+
+@[expose] public section
 
 namespace ReadL1
 
@@ -137,7 +141,7 @@ lemma lemma4_I_eq (h : GrowthHyp d) {m s : ℕ} (hm : 2 < m) (hs : InK1 d m s) {
   have hone : (1 : ℝ) ≤ alpha := one_le_alpha
   -- 2.1°: `r = n - m`, `Qₘ fᵢ = -aₘ xʲ`, `j = i - r aₙ`.
   have hq : qImage d m i = -(seqA d m : ℂ) • xPow d (i - r * seqA d n) := by
-    rw [qImage, if_neg (by omega), block_eq hP hB, if_pos ⟨rfl, heq⟩]
+    rw [qImage, ite_eq_right (by omega), block_eq hP hB, ite_eq_left ⟨rfl, heq⟩]
     dsimp only; rw [show n - m = r by omega]
   have hnrm : n - r = m := by omega
   set j := i - r * seqA d n with hj

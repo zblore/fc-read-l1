@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Theorem7Prep
+module
+
+public import ReadL1.Theorem7Prep
 
 /-!
 # Śliwa's Theorem 7: no nontrivial closed invariant subspace
@@ -27,6 +29,8 @@ below `aₘ⁻¹`, `aₘ⁻¹`, `aₘ⁻¹`, `aₘ⁻¹`, `2aₖ₋₁⁻¹` ((S
 The vector `x⁰ = δ₀` has dense orbit span (its orbit is `x⁰, x¹, x², …`, spanning the finite
 sequences), so `ReadL1.isEmpty_closedInvariantSubspace_of_cyclic` finishes.
 -/
+
+@[expose] public section
 
 namespace ReadL1
 
@@ -206,7 +210,7 @@ theorem exists_aeval_near_delta {e : L1} (he0 : e ≠ 0) (he1 : ‖e‖ ≤ 1) {
     rw [hPF]
     refine (nrm_toCoord_K_mul_le hP (by omega) (fun j hj ↦ ?_) (natDegree_ptrunc_le c t)).trans_lt
       ?_
-    · rw [coeff_ptrunc, ht_def, coeff_X_pow_mul', if_neg (show ¬ a ≤ j by omega)]
+    · rw [coeff_ptrunc, ht_def, coeff_X_pow_mul', ite_eq_right (show ¬ a ≤ j by omega)]
       simp
     · calc (b : ℝ)⁻¹ * pnorm (ptrunc c t) ≤ (b : ℝ)⁻¹ * (R * A) := by
             refine mul_le_mul_of_nonneg_left ((pnorm_ptrunc_le c t).trans ?_) (by positivity)

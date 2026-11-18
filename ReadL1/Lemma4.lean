@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Lemma4K
+module
+
+public import ReadL1.Lemma4K
 
 /-!
 # Śliwa's Lemma 4: `‖Tˢ - Tˢ Qₘ‖ ≤ α`
@@ -13,6 +15,8 @@ For `m > 2` and `s ∈ Kₘ,₁` (Śliwa pp. 632–635). In coordinates it is th
 previous files; on ℓ¹ it is an operator-norm bound (`ReadL1.lemma4`), with `Qₘ` extended to ℓ¹ by
 `l1Lift` (`ReadL1.readQ`).
 -/
+
+@[expose] public section
 
 namespace ReadL1
 
@@ -26,7 +30,7 @@ theorem lemma4_coord (h : GrowthHyp d) {m s : ℕ} (hm : 2 < m) (hs : InK1 d m s
     nrm ((T₀ d ^ s) (single i 1 - qImage d m i)) ≤ alpha := by
   have hP := h.toPartitionHyp
   rcases le_or_gt i ((m - 1) * seqA d m) with hi | hi
-  · rw [qImage, if_pos hi, sub_self, map_zero, nrm_zero]; exact alpha_pos.le
+  · rw [qImage, ite_eq_left hi, sub_self, map_zero, nrm_zero]; exact alpha_pos.le
   · have hB := block_mem hP (i := i) (by omega)
     rcases hbl : block d i with ⟨n, r, k⟩
     rw [hbl] at hB

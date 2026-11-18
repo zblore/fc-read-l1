@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import FormalConjectures.Wikipedia.InvariantSubspaceProblem
+module
+
+public import ReadL1.Defs
 
 /-!
 # From cyclic vectors to no invariant subspace
@@ -18,6 +20,8 @@ This is the last step of Read's argument as Śliwa writes it (W. Śliwa, Rocky M
 (2010), proof of Theorem 7, p. 640), and Noel's Corollary 2.2.7 (J. A. Noel, *The Invariant
 Subspace Problem*, BSc thesis, Thompson Rivers University, 2011).
 -/
+
+@[expose] public section
 
 namespace ReadL1
 

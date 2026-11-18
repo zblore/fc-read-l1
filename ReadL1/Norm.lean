@@ -3,8 +3,10 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Basis
-import ReadL1.Growth
+module
+
+public import ReadL1.Basis
+public import ReadL1.Growth
 
 /-!
 # The norm, and Śliwa's Lemma 1 (b)
@@ -22,6 +24,8 @@ This file proves the facts about `xⁱ` that the boundedness proof (Lemma 2) use
   by `aₙ` (or `bₙ`) moves `i` to the block `Iₙ,ᵣ₋₁` (or `Kₙ,ᵣ₋₁`), and each step contributes
   one basis vector.
 -/
+
+@[expose] public section
 
 namespace ReadL1
 
@@ -94,14 +98,14 @@ lemma xPow_of_I (h : PartitionHyp d) {i : ℕ} {B : Block} (hB : B.Mem d i) (hk 
   obtain ⟨i', rfl, hb⟩ := xPow_unfold h hB
   rw [xPow, hb]
   simp only [hk]
-  rw [dif_pos (Nat.one_le_iff_ne_zero.1 (h.one_le_a _))]
+  rw [dite_eq_left (Nat.one_le_iff_ne_zero.1 (h.one_le_a _))]
 
 lemma xPow_of_K (h : PartitionHyp d) {i : ℕ} {B : Block} (hB : B.Mem d i) (hk : B.kind = .K) :
     xPow d i = single i 1 + (seqB d B.n : ℂ) • xPow d (i - seqB d B.n) := by
   obtain ⟨i', rfl, hb⟩ := xPow_unfold h hB
   rw [xPow, hb]
   simp only [hk]
-  rw [dif_pos (lt_of_le_of_lt (Nat.zero_le _) (h.a_lt_b _)).ne']
+  rw [dite_eq_left (lt_of_le_of_lt (Nat.zero_le _) (h.a_lt_b _)).ne']
 
 /-! ### Exact norms on `J` and `L` blocks -/
 

@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Explicit
+module
+
+public import ReadL1.Explicit
 
 /-!
 # Read's theorem on ℓ¹, in the form of Formal Conjectures
@@ -13,6 +15,8 @@ import ReadL1.Explicit
 operator (`ReadL1.readOp`), built from the explicit sequence `ReadL1.dRead`, is one
 (`ReadL1.theorem7`, `ReadL1.theorem7Hyp_dRead`).
 -/
+
+@[expose] public section
 
 namespace ReadL1
 

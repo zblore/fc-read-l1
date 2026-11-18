@@ -3,8 +3,10 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Basis
-import ReadL1.PolyNorm
+module
+
+public import ReadL1.Basis
+public import ReadL1.PolyNorm
 
 /-!
 # Polynomials in Śliwa's coordinates
@@ -13,6 +15,8 @@ A polynomial's coordinates in the basis `(fᵢ)`: `∑ cᵢ xⁱ ↦ ∑ cᵢ xP
 Śliwa's `‖f‖` is `nrm (toCoord f)`; the operator multiplies by `x` (`ReadL1.T₀_toCoord`), and
 `q(T)` multiplies by `q` (`ReadL1.aeval_T₀_toCoord`).
 -/
+
+@[expose] public section
 
 namespace ReadL1
 

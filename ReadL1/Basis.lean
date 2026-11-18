@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Partition
+module
+
+public import ReadL1.Partition
 
 /-!
 # Śliwa's basis and the operator on finite sequences
@@ -28,6 +30,8 @@ Multiplying each `fᵢ` by `x` gives where the operator sends `δᵢ` (`ReadL1.s
 operator on finite sequences is the linear extension (`ReadL1.T₀`). The point of the file is
 `ReadL1.T₀_xPow`: the operator sends `xⁱ` to `xⁱ⁺¹`, i.e. it really is multiplication by `x`.
 -/
+
+@[expose] public section
 
 namespace ReadL1
 
@@ -60,7 +64,7 @@ lemma Block.one_le_of_mem (h : PartitionHyp d) {B : Block} {i : ℕ} (hB : B.Mem
 
 lemma block_mem (h : PartitionHyp d) {i : ℕ} (hi : 1 ≤ i) : (block d i).Mem d i := by
   have hex := exists_block h hi
-  rw [block, dif_pos hex]
+  rw [block, dite_eq_left hex]
   exact hex.choose_spec
 
 /-- Any block containing `i` is `block d i`. -/
@@ -120,30 +124,30 @@ theorem T₀_xPow (h : PartitionHyp d) (i : ℕ) : T₀ d (xPow d i) = xPow d (i
       simp only [hkind] at hk ⊢
     · -- `J`: `xⁱ = δᵢ / cᵢ` and `δᵢ ↦ cᵢ xⁱ⁺¹`.
       rw [map_smul, T₀_single]
-      simp only [shiftImage, Nat.add_one_ne_zero, if_false, hkind]
+      simp only [shiftImage, Nat.add_one_ne_zero, ite_false, hkind]
       rw [one_smul, smul_smul, inv_mul_cancel₀ (weight_ne_zero _ _ _), one_smul]
     · -- `I`: `xⁱ = δᵢ / aₙ₋ᵣ + x^{i - aₙ}` and `δᵢ ↦ aₙ₋ᵣ (xⁱ⁺¹ - x^{i + 1 - aₙ})`.
       have ha' : (seqA d ((block d (i + 1)).n - (block d (i + 1)).r) : ℂ) ≠ 0 := by
         exact Nat.cast_ne_zero.2 (Nat.one_le_iff_ne_zero.1 (h.one_le_a _))
       have hle : seqA d (block d (i + 1)).n ≤ i + 1 := by
         have := Nat.le_mul_of_pos_left (seqA d (block d (i + 1)).n) hr1; omega
-      rw [dif_pos (by omega), map_add, map_smul, T₀_single, ih _ (by omega)]
-      simp only [shiftImage, Nat.add_one_ne_zero, if_false, hkind]
+      rw [dite_eq_left (by omega), map_add, map_smul, T₀_single, ih _ (by omega)]
+      simp only [shiftImage, Nat.add_one_ne_zero, ite_false, hkind]
       rw [one_smul, smul_smul, inv_mul_cancel₀ ha', one_smul]
       rw [show i + 1 - seqA d (block d (i + 1)).n + 1 = i + 1 + 1 - seqA d (block d (i + 1)).n
         by omega]
       abel
     · -- `L`: as for `J`, with `bₙ`.
       rw [map_smul, T₀_single]
-      simp only [shiftImage, Nat.add_one_ne_zero, if_false, hkind]
+      simp only [shiftImage, Nat.add_one_ne_zero, ite_false, hkind]
       rw [one_smul, smul_smul, inv_mul_cancel₀ (weight_ne_zero _ _ _), one_smul]
     · -- `K`: `xⁱ = δᵢ + bₙ x^{i - bₙ}` and `δᵢ ↦ xⁱ⁺¹ - bₙ x^{i + 1 - bₙ}`.
       have hle : seqB d (block d (i + 1)).n ≤ i + 1 := by
         have := Nat.le_mul_of_pos_left (seqA d (block d (i + 1)).n + seqB d (block d (i + 1)).n)
           hr1
         omega
-      rw [dif_pos (by omega), map_add, map_smul, T₀_single, one_smul, ih _ (by omega)]
-      simp only [shiftImage, Nat.add_one_ne_zero, if_false, hkind]
+      rw [dite_eq_left (by omega), map_add, map_smul, T₀_single, one_smul, ih _ (by omega)]
+      simp only [shiftImage, Nat.add_one_ne_zero, ite_false, hkind]
       rw [show i + 1 - seqB d (block d (i + 1)).n + 1 = i + 1 + 1 - seqB d (block d (i + 1)).n
         by omega]
       abel

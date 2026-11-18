@@ -3,9 +3,11 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Coord
-import ReadL1.Lemma4
-import ReadL1.Lemma6
+module
+
+public import ReadL1.Coord
+public import ReadL1.Lemma4
+public import ReadL1.Lemma6
 
 /-!
 # `Qₘ e` as a polynomial
@@ -15,6 +17,8 @@ norm. Here: `Qₘ fₗ` as a polynomial (`ReadL1.qPolyBasis`); its `j`-th coeffi
 as the functional `e ↦ ∑ₗ eₗ (Qₘ fₗ)ⱼ` (`ReadL1.qCoeffCLM`); and the polynomial with those
 coefficients (`ReadL1.qPoly`), whose coordinates are `Qₘ e` (`ReadL1.toL1_toCoord_qPoly`).
 -/
+
+@[expose] public section
 
 namespace ReadL1
 
@@ -31,14 +35,14 @@ lemma norm_coeff_le_pnorm (p : ℂ[X]) (j : ℕ) : ‖p.coeff j‖ ≤ pnorm p :
 noncomputable def qPolyBasis (d : ℕ → ℕ) (m l : ℕ) : ℂ[X] := fromCoord d (qImage d m l)
 
 lemma qPolyBasis_of_le {m l : ℕ} (hl : l ≤ (m - 1) * seqA d m) : qPolyBasis d m l = fPoly d l := by
-  rw [qPolyBasis, qImage, if_pos hl, fromCoord_single, one_smul]
+  rw [qPolyBasis, qImage, ite_eq_left hl, fromCoord_single, one_smul]
 
 lemma qPolyBasis_of_gt (h : PartitionHyp d) {m l : ℕ} (hl : (m - 1) * seqA d m < l) :
     qPolyBasis d m l =
       if (block d l).kind = .I ∧ (block d l).r + m = (block d l).n then
         -(seqA d m : ℂ) • X ^ (l - ((block d l).n - m) * seqA d (block d l).n)
       else 0 := by
-  rw [qPolyBasis, qImage, if_neg (by omega)]
+  rw [qPolyBasis, qImage, ite_eq_right (by omega)]
   split_ifs
   · rw [map_smul, fromCoord_xPow h]
   · rw [map_zero]

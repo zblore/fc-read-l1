@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.QPoly
+module
+
+public import ReadL1.QPoly
 
 /-!
 # The coefficients of `Qₙ e` (Śliwa's (2), (3) and the identity `y_{m,j} = aₙ eⱼ`)
@@ -18,6 +20,8 @@ import ReadL1.QPoly
 * `ReadL1.yCoeff_of_window`: `y_{m,j} = aₙ eⱼ` on `M_{m,n} = ((m - n)aₘ + vₙ₋₂, (m - n)aₘ + vₙ₋₁]`
   (Śliwa p. 637).
 -/
+
+@[expose] public section
 
 namespace ReadL1
 
@@ -57,16 +61,17 @@ theorem qCoeffCLM_eq_add (h : PartitionHyp d) (n j : ℕ) (e : L1) :
       (if l ≤ c then e l * (fPoly d l).coeff j else 0) +
         (if c < l then e l * (qPolyBasis d n l).coeff j else 0) := fun l ↦ by
     by_cases hl : l ≤ c
-    · rw [if_pos hl, if_neg (by omega), add_zero, qPolyBasis_of_le hl]
-    · rw [if_neg hl, if_pos (by omega), zero_add]
+    · rw [ite_eq_left hl, ite_eq_right (by omega), add_zero, qPolyBasis_of_le hl]
+    · rw [ite_eq_right hl, ite_eq_left (by omega), zero_add]
   have hs1 : Summable fun l ↦ if l ≤ c then e l * (fPoly d l).coeff j else 0 :=
     summable_of_ne_finset_zero (s := Finset.range (c + 1)) fun l hl ↦ by
-      rw [if_neg (by simp at hl; omega)]
+      rw [ite_eq_right (by simp at hl; omega)]
   rw [qCoeffCLM_apply, tsum_congr hsplit,
     Summable.tsum_add hs1 (summable_ite_of_norm (summable_norm_qTerm h n j e) _),
-    tsum_eq_sum (s := Finset.range (c + 1)) (fun l hl ↦ by rw [if_neg (by simp at hl; omega)])]
+    tsum_eq_sum (s := Finset.range (c + 1))
+      (fun l hl ↦ by rw [ite_eq_right (by simp at hl; omega)])]
   congr 1
-  exact Finset.sum_congr rfl fun l hl ↦ by rw [if_pos (by simp at hl; omega)]
+  exact Finset.sum_congr rfl fun l hl ↦ by rw [ite_eq_left (by simp at hl; omega)]
 
 /-- `z_{n,j} = 0` above `vₙ₋₁`. -/
 lemma zCoeff_eq_zero (h : PartitionHyp d) {n j : ℕ} (hj : seqV d (n - 1) < j)
@@ -77,7 +82,7 @@ lemma zCoeff_eq_zero (h : PartitionHyp d) {n j : ℕ} (hj : seqV d (n - 1) < j)
   · rw [qPolyBasis_of_gt h hl]
     split_ifs with hc
     · have := exponent_le_of_I h hc.1 hc.2 (by omega)
-      rw [smul_eq_C_mul, coeff_C_mul, coeff_X_pow, if_neg (by omega), mul_zero, mul_zero]
+      rw [smul_eq_C_mul, coeff_C_mul, coeff_X_pow, ite_eq_right (by omega), mul_zero, mul_zero]
     · simp
   · rfl
 
@@ -115,12 +120,12 @@ theorem hasSum_zCoeff (h : GrowthHyp d) {n j : ℕ} (hn : 2 ≤ n) (hj : j ≤ s
     simp only [zIdx]
     omega
   have hFg : ∀ t, F (zIdx d n j t) = -(seqA d n : ℂ) * e (zIdx d n j t) := fun t ↦ by
-    simp only [hF, if_pos (hcg t)]
+    simp only [hF, ite_eq_left (hcg t)]
     rw [qPolyBasis_of_gt hP (hcg t), block_eq hP (zIdx_mem (by omega) hj t)]
     dsimp only
-    rw [if_pos ⟨rfl, by omega⟩, show n + t + 1 - n = t + 1 by omega,
+    rw [ite_eq_left ⟨rfl, by omega⟩, show n + t + 1 - n = t + 1 by omega,
       show zIdx d n j t - (t + 1) * seqA d (n + t + 1) = j by simp [zIdx],
-      smul_eq_C_mul, coeff_C_mul, coeff_X_pow, if_pos rfl, mul_one]
+      smul_eq_C_mul, coeff_C_mul, coeff_X_pow, ite_eq_left rfl, mul_one]
     ring
   have hFoff : ∀ l, l ∉ Set.range (zIdx d n j) → F l = 0 := fun l hl ↦ by
     simp only [hF]
@@ -204,9 +209,9 @@ lemma coeff_fPoly_of_window (h : PartitionHyp d) {m n j l : ℕ} (hn : 2 < n) (h
     rw [fPoly_of_I h hjI rfl]
     dsimp only
     rw [show m - (m - n) = n by omega, coeff_C_mul, coeff_sub, coeff_X_pow, coeff_X_pow,
-      if_pos rfl, if_neg (by omega), sub_zero, mul_one]
+      ite_eq_left rfl, ite_eq_right (by omega), sub_zero, mul_one]
   · rcases Nat.eq_zero_or_pos l with rfl | hl0
-    · rw [fPoly_zero, coeff_one, if_neg (by omega)]
+    · rw [fPoly_zero, coeff_one, ite_eq_right (by omega)]
     have hB := block_mem h hl0
     rcases hbl : block d l with ⟨n', r, k⟩
     rw [hbl] at hB
@@ -219,13 +224,13 @@ lemma coeff_fPoly_of_window (h : PartitionHyp d) {m n j l : ℕ} (hn : 2 < n) (h
       exact level_unique h (by omega) (by omega) ⟨hlo, hhi⟩
         ⟨by omega, by omega⟩
     cases k with
-    | J => rw [fPoly_of_J h hB rfl, coeff_C_mul_X_pow, if_neg (fun h' ↦ hlj h'.symm)]
-    | L => rw [fPoly_of_L h hB rfl, coeff_C_mul_X_pow, if_neg (fun h' ↦ hlj h'.symm)]
+    | J => rw [fPoly_of_J h hB rfl, coeff_C_mul_X_pow, ite_eq_right (fun h' ↦ hlj h'.symm)]
+    | L => rw [fPoly_of_L h hB rfl, coeff_C_mul_X_pow, ite_eq_right (fun h' ↦ hlj h'.symm)]
     | I =>
       rw [fPoly_of_I h hB rfl, coeff_C_mul, coeff_sub, coeff_X_pow, coeff_X_pow,
-        if_neg (fun h' ↦ hlj h'.symm)]
+        ite_eq_right (fun h' ↦ hlj h'.symm)]
       dsimp only
-      rw [if_neg, sub_zero, mul_zero]
+      rw [ite_eq_right, sub_zero, mul_zero]
       intro hje
       have ha' := h.one_le_a n'
       obtain rfl : m = n' := (hlev (by omega)).symm
@@ -242,9 +247,9 @@ lemma coeff_fPoly_of_window (h : PartitionHyp d) {m n j l : ℕ} (hn : 2 < n) (h
       exact absurd (congrArg Block.kind (block_unique h hB hJ)) (by simp)
     | K =>
       rw [fPoly_of_K h hB rfl, coeff_sub, coeff_X_pow, coeff_C_mul, coeff_X_pow,
-        if_neg (fun h' ↦ hlj h'.symm)]
+        ite_eq_right (fun h' ↦ hlj h'.symm)]
       dsimp only
-      rw [if_neg, mul_zero, sub_zero]
+      rw [ite_eq_right, mul_zero, sub_zero]
       intro hje
       have hb : 0 < seqB d n' := lt_of_le_of_lt (Nat.zero_le _) (h.a_lt_b n')
       obtain rfl : m = n' := (hlev (by omega)).symm
@@ -264,6 +269,6 @@ theorem yCoeff_of_window (h : PartitionHyp d) {m n j : ℕ} (hn : 2 < n) (hnm : 
   rw [Finset.sum_congr rfl fun l hl ↦ by
     rw [coeff_fPoly_of_window h hn hnm hj1 hj2 (by simp at hl; omega)]]
   simp only [mul_ite, mul_zero]
-  rw [Finset.sum_ite_eq', if_pos (by simp; omega), mul_comm]
+  rw [Finset.sum_ite_eq', ite_eq_left (by simp; omega), mul_comm]
 
 end ReadL1

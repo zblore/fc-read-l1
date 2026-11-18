@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.PolyNorm
+module
+
+public import ReadL1.PolyNorm
 
 /-!
 # Exact inverses of a polynomial, up to a given degree
@@ -13,6 +15,8 @@ The construction inside Śliwa's Lemma 6 (p. 639): if `y₀ ≠ 0`, put `qᵢ = 
 degree up to any `n ≥ m` (`ReadL1.ptrunc_invPoly_mul`), and `|q_{m+t}| ≤ (M/|y₀|)ᵗ / |y₀|` when
 `|y| ≤ M` (`ReadL1.norm_invCoeff_le`).
 -/
+
+@[expose] public section
 
 namespace ReadL1
 
@@ -31,15 +35,15 @@ noncomputable def invCoeff (y : ℂ[X]) (m : ℕ) : ℕ → ℂ
     omega
 
 lemma invCoeff_of_lt {y : ℂ[X]} {m i : ℕ} (hi : i < m) : invCoeff y m i = 0 := by
-  rw [invCoeff, dif_pos hi]
+  rw [invCoeff, dite_eq_left hi]
 
 lemma invCoeff_self (y : ℂ[X]) (m : ℕ) : invCoeff y m m = (y.coeff 0)⁻¹ := by
-  rw [invCoeff, dif_neg (lt_irrefl m), dif_pos rfl]
+  rw [invCoeff, dite_eq_right (lt_irrefl m), dite_eq_left rfl]
 
 lemma invCoeff_of_gt {y : ℂ[X]} {m i : ℕ} (hi : m < i) :
     invCoeff y m i = -(y.coeff 0)⁻¹ *
       ∑ j ∈ Finset.Icc 1 (i - m), y.coeff j * invCoeff y m (i - j) := by
-  rw [invCoeff, dif_neg (by omega), dif_neg (by omega)]
+  rw [invCoeff, dite_eq_right (by omega), dite_eq_right (by omega)]
   congr 1
   exact Finset.sum_attach (Finset.Icc 1 (i - m)) fun j ↦ y.coeff j * invCoeff y m (i - j)
 
@@ -47,13 +51,13 @@ lemma invCoeff_of_gt {y : ℂ[X]} {m i : ℕ} (hi : m < i) :
 lemma sum_invCoeff_mul {y : ℂ[X]} (hy : y.coeff 0 ≠ 0) (m l : ℕ) :
     ∑ a ∈ Finset.range (l + 1), invCoeff y m a * y.coeff (l - a) = if l = m then 1 else 0 := by
   rcases lt_trichotomy l m with hlt | rfl | hgt
-  · rw [if_neg hlt.ne]
+  · rw [ite_eq_right hlt.ne]
     exact Finset.sum_eq_zero fun a ha ↦ by
       rw [invCoeff_of_lt (by have := Finset.mem_range.1 ha; omega), zero_mul]
-  · rw [if_pos rfl, Finset.sum_range_succ, Finset.sum_eq_zero fun a ha ↦ by
+  · rw [ite_eq_left rfl, Finset.sum_range_succ, Finset.sum_eq_zero fun a ha ↦ by
       rw [invCoeff_of_lt (Finset.mem_range.1 ha), zero_mul], zero_add, Nat.sub_self,
       invCoeff_self, inv_mul_cancel₀ hy]
-  · rw [if_neg hgt.ne', Finset.sum_range_succ, Nat.sub_self, invCoeff_of_gt hgt]
+  · rw [ite_eq_right hgt.ne', Finset.sum_range_succ, Nat.sub_self, invCoeff_of_gt hgt]
     -- `∑_{a < l} qₐ y_{l-a}` is the sum in the definition of `q_l`: drop `a < m`, then `a ↦ l - a`.
     have h1 : ∑ a ∈ Finset.range l, invCoeff y m a * y.coeff (l - a) =
         ∑ a ∈ Finset.Ico m l, invCoeff y m a * y.coeff (l - a) := by
@@ -83,15 +87,15 @@ lemma coeff_invPoly (y : ℂ[X]) (m n i : ℕ) :
   rw [invPoly, finsetSum_coeff]
   simp only [coeff_monomial]
   by_cases hi : i ≤ n
-  · rw [if_pos hi, Finset.sum_eq_single i (fun j _ hji ↦ if_neg hji)
-      (fun h ↦ absurd (Finset.mem_range.2 (by omega)) h), if_pos rfl]
-  · rw [if_neg hi]
-    exact Finset.sum_eq_zero fun j hj ↦ if_neg (by have := Finset.mem_range.1 hj; omega)
+  · rw [ite_eq_left hi, Finset.sum_eq_single i (fun j _ hji ↦ ite_eq_right hji)
+      (fun h ↦ absurd (Finset.mem_range.2 (by omega)) h), ite_eq_left rfl]
+  · rw [ite_eq_right hi]
+    exact Finset.sum_eq_zero fun j hj ↦ ite_eq_right (by have := Finset.mem_range.1 hj; omega)
 
 lemma natDegree_invPoly_le (y : ℂ[X]) (m n : ℕ) : (invPoly y m n).natDegree ≤ n := by
   rw [natDegree_le_iff_coeff_eq_zero]
   intro i hi
-  rw [coeff_invPoly, if_neg (by exact_mod_cast not_le.2 hi)]
+  rw [coeff_invPoly, ite_eq_right (by exact_mod_cast not_le.2 hi)]
 
 /-- **`Pₙ (q y) = xᵐ`** for `m ≤ n`, when `y₀ ≠ 0`. -/
 lemma ptrunc_invPoly_mul {y : ℂ[X]} (hy : y.coeff 0 ≠ 0) {m n : ℕ} (hmn : m ≤ n) :
@@ -102,11 +106,13 @@ lemma ptrunc_invPoly_mul {y : ℂ[X]} (hy : y.coeff 0 ≠ 0) {m n : ℕ} (hmn : 
   · rw [coeff_mul, Finset.Nat.sum_antidiagonal_eq_sum_range_succ_mk]
     simp only [coeff_invPoly]
     rw [Finset.sum_congr rfl fun a ha ↦ by
-      rw [if_pos (by have := Finset.mem_range.1 ha; omega)], sum_invCoeff_mul hy m l, if_pos hlm]
+      rw [ite_eq_left (by have := Finset.mem_range.1 ha; omega)], sum_invCoeff_mul hy m l,
+        ite_eq_left hlm]
   · rw [coeff_mul, Finset.Nat.sum_antidiagonal_eq_sum_range_succ_mk]
     simp only [coeff_invPoly]
     rw [Finset.sum_congr rfl fun a ha ↦ by
-      rw [if_pos (by have := Finset.mem_range.1 ha; omega)], sum_invCoeff_mul hy m l, if_neg hlm]
+      rw [ite_eq_left (by have := Finset.mem_range.1 ha; omega)], sum_invCoeff_mul hy m l,
+        ite_eq_right hlm]
   · omega
   · rfl
 

@@ -2,15 +2,27 @@
 
 version: "v0.4"
 
+# Zayn Blore's ORCID: 0009-0009-8447-7247
+
 project:
-  name: "fc-read-l1"
+  name: "Read's theorem: a bounded operator on l1 with no nontrivial closed invariant subspace"
   description: >-
-    A machine-checked proof that there is a bounded operator on ℓ¹ with no nontrivial closed
-    invariant subspace (Read's theorem), following Śliwa's explicit version, against the
-    definitions of Formal Conjectures' invariant subspace problem file.
+    A machine-checked proof that there is a bounded operator on l1(N, C) with no closed invariant
+    subspace other than 0 and the whole space. This is Read's 1985 counterexample to the invariant
+    subspace problem on l1, following Wieslaw Sliwa's explicit version of Read's operator (Rocky
+    Mountain J. Math. 40, 2010), which replaces "sufficiently rapidly increasing" sequences by
+    concrete growth conditions and proves every lemma. Its audience is operator theory and the
+    geometry of Banach spaces. It is the statement Invariant_subspace_problem_l1 of Formal
+    Conjectures (InvariantSubspaceProblem.lean), which marks it research solved. The result is
+    classical and no priority is claimed. The operator is multiplication by x in a basis of the
+    polynomials built from a fast-growing integer sequence; the proof shows that the vector 1 can be
+    approximated by p(T)e for every nonzero e, so no nonzero closed invariant subspace can be proper.
+    The open case of a separable Hilbert space is not addressed.
   authors:
     - "Zayn Blore"
   license: "Apache-2.0"
+  responsible_maintainers:
+    - "Zayn Blore"
 
 sources:
   - title: "An explicit example concerning the invariant subspace problem for Banach spaces"
@@ -20,24 +32,25 @@ sources:
     type: "paper"
     location: "Rocky Mountain J. Math. 40 (2010) 627–641, Lemmas 1–6 and Theorem 7"
     relationship: "formalizes"
-    author_endorsement: "n/a"
+    author_endorsement: "not-contacted"
   - title: "A solution to the invariant subspace problem on the space l1"
     authors:
       - "Charles J. Read"
     id: "https://doi.org/10.1112/blms/17.4.305"
     type: "paper"
-    location: "Bull. London Math. Soc. 17 (1985) 305–317"
-    relationship: "related"
+    location: "Bull. London Math. Soc. 17 (1985) 305–317. Formal Conjectures cites it for the statement."
+    relationship: "background"
     author_endorsement: "n/a"
 
 related_formalizations:
   - id: "https://github.com/google-deepmind/formal-conjectures/blob/40a8592cb6f7e96cb9a8275d96bb3e013feeb1dc/FormalConjectures/Wikipedia/InvariantSubspaceProblem.lean"
     relationship: "builds-on"
     note: >-
-      Supplies the statement `InvariantSubspaceProblem.Invariant_subspace_problem_l1` and the
-      structure `ClosedInvariantSubspace` it uses. This repository depends on Formal Conjectures
-      at that commit and proves the same proposition without using the declaration left as
-      `sorry` there.
+      Supplies the statement Invariant_subspace_problem_l1 and the structure ClosedInvariantSubspace
+      it uses. Challenge.lean and ReadL1/Defs.lean copy them verbatim, without the category and AMS
+      attributes; scripts/check-fc-match.py checks this against Formal Conjectures at that commit.
+      The theorem keeps Formal Conjectures' name. Formal Conjectures links this repository's proof
+      at commit 57ceaa0, the version that depends on Formal Conjectures directly.
 
 classification:
   arxiv:
@@ -52,21 +65,28 @@ automation:
       models:
         - "Claude Opus 5.5"
       framework: "Claude Code"
-  notes: "I drafted the Lean with Claude Code."
+  notes: "I drafted the Lean with Claude Code, following Śliwa's paper lemma by lemma."
 
 review:
-  status: "author-verified"
-  reviewers:
-    - "Zayn Blore"
+  status: "self-assessed"
   notes: >-
-    Checks run: statement term-identical to Formal Conjectures' `Invariant_subspace_problem_l1`;
-    axioms limited to propext, Classical.choice and Quot.sound; the operator is shown to be
-    nonzero; every declaration is reachable from the headline theorem; `lake build` with
-    Mathlib's standard linter set passes; the audits in `audit/` pass.
+    Checked locally (Windows): the build with warnings as errors;
+    scripts/check-fc-match.py and its self-test, which regenerate Challenge.lean's code from Formal
+    Conjectures at the pinned commit and require an exact match, pin the source file by SHA-256, and
+    confirm that a list of altered inputs fail. That is a comparison of text: Formal Conjectures
+    builds with Lean and Mathlib v4.33.1 and this repository with v4.35.0-rc3, and the script does
+    not read what that file imports; audit/Axioms.lean, which enforces with #guard_msgs that the
+    main results and key lemmas use only propext, Classical.choice and Quot.sound;
+    audit/Control.lean, which checks that the audit detects sorryAx and that the operator is not
+    zero; audit/Vacuity.lean, which checks that every ReadL1 declaration is reachable from the
+    headline theorem; and audit/lexical.py, which checks docstrings, imports and formatting.
+    lake comparator runs in CI and in Palomar's own pipeline.
 
 status:
   scope: >-
-    Full proof of the single Formal Conjectures statement `Invariant_subspace_problem_l1`.
+    A full proof of one Formal Conjectures statement, Invariant_subspace_problem_l1. Apart from the
+    placeholder in Challenge.lean, the only sorry is a deliberate control in audit/Control.lean,
+    which Solution does not import.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms:
@@ -75,9 +95,20 @@ status:
     - "Quot.sound"
   main_results:
     - description: >-
-        There is a bounded operator on ℓ¹(ℕ, ℂ) with no nontrivial closed invariant subspace.
-      declaration: "ReadL1.invariant_subspace_problem_l1"
-      file: "ReadL1/Main.lean"
+        There is a bounded operator on l1(N, C) with no nontrivial closed invariant subspace. Formal
+        Conjectures' statement, under Formal Conjectures' name, the name Palomar checks.
+      declaration: "InvariantSubspaceProblem.Invariant_subspace_problem_l1"
+      file: "ReadL1/FormalTarget.lean"
+      sorry_count: 0
+      axioms:
+        - "propext"
+        - "Classical.choice"
+        - "Quot.sound"
+    - description: >-
+        Śliwa's Theorem 7: for any sequence meeting the growth inequalities the proof uses, Śliwa's
+        operator has no nontrivial closed invariant subspace.
+      declaration: "ReadL1.theorem7"
+      file: "ReadL1/Theorem7.lean"
       sorry_count: 0
       axioms:
         - "propext"
@@ -86,22 +117,27 @@ status:
 
 fidelity:
   divergences: >-
-    None in the statement, which is Formal Conjectures' own. The proof follows Śliwa's paper
-    lemma by lemma, with α fixed at 8, exact constants where the paper rounds, the bound on
-    the polynomial Qₘe obtained through the basis rather than through Śliwa's √Aₘ · √Aₘ, and
-    one concrete growth sequence (each term after the first a power 8^{2s}). Theorem 7 is
-    proved from the inequalities its proof uses (GrowthHyp, Theorem7Hyp), not from Śliwa's
-    growth condition dₙ₊₁ ≥ α^{(n dₙ)!}; the concrete sequence satisfies those inequalities
-    but not Śliwa's condition at every step.
+    None in the statement, which is Formal Conjectures' text with its attributes removed, under
+    Formal Conjectures' name. Challenge imports Mathlib rather than FormalConjecturesUtil and builds
+    with Lean v4.35.0-rc3 rather than Formal Conjectures' v4.33.1, so the check against Formal
+    Conjectures compares text, not elaborated terms. The proof follows Śliwa's paper lemma by lemma,
+    with α fixed at 8, exact constants where the paper rounds, the bound on the polynomial Qₘe
+    obtained through the basis rather than through Śliwa's √Aₘ · √Aₘ, and one concrete growth
+    sequence (each term after the first a power 8^{2s}). Theorem 7 is proved from the inequalities
+    its proof uses (GrowthHyp, Theorem7Hyp), not from Śliwa's growth condition
+    dₙ₊₁ ≥ α^{(n dₙ)!}; the concrete sequence satisfies those inequalities but not Śliwa's
+    condition at every step.
 
 alignment:
   namespaces:
+    - "InvariantSubspaceProblem"
     - "ReadL1"
   statements:
     - source: "Formal Conjectures, InvariantSubspaceProblem.Invariant_subspace_problem_l1"
-      lean: "ReadL1.invariant_subspace_problem_l1"
-      module: "ReadL1.Main"
+      lean: "InvariantSubspaceProblem.Invariant_subspace_problem_l1"
+      module: "ReadL1.FormalTarget"
       status: "proved"
+      note: "Formal Conjectures' own name; also ReadL1.invariant_subspace_problem_l1."
     - source: "Śliwa 2010, Theorem 7"
       lean: "ReadL1.theorem7"
       module: "ReadL1.Theorem7"

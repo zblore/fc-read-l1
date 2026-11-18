@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Lemma4I
+module
+
+public import ReadL1.Lemma4I
 
 /-!
 # Śliwa's Lemma 4, Case 3 (`L` blocks)
@@ -13,6 +15,8 @@ For `i ∈ Lₙ,ᵣ` above `(m - 1)aₘ` (so `n ≥ m`), `Qₘ fᵢ = 0` and `T�
 With `n > m`: `j` is still in `Lₙ,ᵣ` (3.3°), or `Tˢ fᵢ` passes through `T f_{r(aₙ + bₙ) - 1}`, which
 Remark 3 bounds by `1/bₙ` (3.4°).
 -/
+
+@[expose] public section
 
 namespace ReadL1
 

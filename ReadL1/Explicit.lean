@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Theorem7
+module
+
+public import ReadL1.Theorem7
 
 /-!
 # An explicit sequence satisfying every growth fact
@@ -19,6 +21,8 @@ natural-number exponents. With `aₙ = 8^{2xₙ₋₁}` and `bₙ = 8^{2yₙ₋�
 
 `ReadL1.theorem7Hyp_dRead` proves `Theorem7Hyp` for this sequence.
 -/
+
+@[expose] public section
 
 namespace ReadL1
 
@@ -61,11 +65,11 @@ def dRead (j : ℕ) : ℕ :=
 
 lemma seqA_dRead {n : ℕ} (hn : 1 ≤ n) : seqA dRead n = 8 ^ (2 * xs (n - 1)) := by
   unfold seqA dRead
-  rw [if_neg (by omega), if_pos (by omega), show (2 * n - 1) / 2 = n - 1 by omega]
+  rw [ite_eq_right (by omega), ite_eq_left (by omega), show (2 * n - 1) / 2 = n - 1 by omega]
 
 lemma seqB_dRead {n : ℕ} (hn : 1 ≤ n) : seqB dRead n = 8 ^ (2 * ys (n - 1)) := by
   unfold seqB dRead
-  rw [if_neg (by omega), if_neg (by omega), show 2 * n / 2 - 1 = n - 1 by omega]
+  rw [ite_eq_right (by omega), ite_eq_right (by omega), show 2 * n / 2 - 1 = n - 1 by omega]
 
 lemma seqA_dRead_zero : seqA dRead 0 = 2 := by simp [seqA, dRead]
 

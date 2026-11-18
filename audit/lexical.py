@@ -11,9 +11,8 @@ import sys
 root = sys.argv[1] if len(sys.argv) > 1 else "."
 files = sorted(glob.glob(os.path.join(root, "ReadL1", "*.lean")))
 files.append(os.path.join(root, "ReadL1.lean"))
-fc_path = os.path.join(root, ".lake/packages/formal_conjectures/FormalConjectures",
-                       "Wikipedia/InvariantSubspaceProblem.lean")
-fc = open(fc_path, encoding="utf-8").read()
+# Formal Conjectures' text, as copied into Challenge.lean (scripts/check-fc-match.py checks it).
+fc = open(os.path.join(root, "Challenge.lean"), encoding="utf-8").read()
 # Read bytes, so CRLF line endings are seen rather than silently converted.
 raw = {f: open(f, "rb").read() for f in files}
 src = {f: b.decode("utf-8") for f, b in raw.items()}
@@ -43,21 +42,20 @@ for f, t in src.items():
             short = name.split(".")[-1]
             wordlike = "_" in short or short[:1].islower()
             # Qualified names such as `Finset.prod_add` or `lp.evalCLM` are taken to be
-            # Mathlib's and are not checked, so a mistyped one would pass. Names here or in the
-            # FC file are checked.
+            # Mathlib's and are not checked, so a mistyped one would pass. Names here or in
+            # Challenge.lean are checked.
             qualified = ("." in name and (name[:1].isupper() or name.startswith("lp."))
                          and not name.startswith(("ReadL1.",
                                                   "InvariantSubspaceProblem.")))
             if (len(short) > 2 and short != "sorry" and wordlike
                     and short not in declared and not qualified):
                 problems.append(f"{f}: docstring names `{name}`, "
-                                "not declared here or in the FC file")
+                                "not declared here or in Challenge.lean")
     code = re.sub(r"--[^\n]*", "", re.sub(r"/-.*?-/", "", t, flags=re.S))
     if re.search(r":=\s*True\b|\bsorry\b|\badmit\b|native_decide", code):
         problems.append(f"{f}: placeholder, sorry, admit or native_decide")
-    for imp in re.findall(r"^import\s+(\S+)", t, re.M):
-        if not (imp.startswith("ReadL1") or imp == "Mathlib"
-                or imp == "FormalConjectures.Wikipedia.InvariantSubspaceProblem"):
+    for imp in re.findall(r"^(?:public\s+)?import\s+(\S+)", t, re.M):
+        if not (imp.startswith("ReadL1") or imp == "Mathlib"):
             problems.append(f"{f}: imports {imp}")
     for i, line in enumerate(t.replace("\r\n", "\n").split("\n"), 1):
         if len(line) > 100:

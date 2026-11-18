@@ -3,8 +3,10 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Cyclic
-import ReadL1.Lemma5
+module
+
+public import ReadL1.Cyclic
+public import ReadL1.Lemma5
 
 /-!
 # Preparations for Theorem 7
@@ -19,6 +21,8 @@ import ReadL1.Lemma5
   `|y| ≤ √Aₘ ‖y‖`; the bound here is the same, reached through the basis directly.
 * The norm estimates in (S2), (S3) and (S5).
 -/
+
+@[expose] public section
 
 namespace ReadL1
 

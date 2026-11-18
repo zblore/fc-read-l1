@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Lemma5Window
+module
+
+public import ReadL1.Lemma5Window
 
 /-!
 # Śliwa's Lemma 5
@@ -23,6 +25,8 @@ For `e ≠ 0` and `k > 2` there is `m > k` with `|P_{(m-k)aₘ} (Qₘ e)| ≥ a�
 Śliwa's constants are slightly rounded here and there (e.g. `2aₙ⁻¹aₙ₋₁` for
 `aₙ⁻¹ + aₙ₊₁⁻¹ + aₙ₋₁aₙ⁻¹`); the growth facts used are `aₘ₊₁ ≥ 2aₘ` and `4aₘ² Bₘ ≤ aₘ₊₁`.
 -/
+
+@[expose] public section
 
 namespace ReadL1
 

@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Projection
+module
+
+public import ReadL1.Projection
 
 /-!
 # Śliwa's Lemma 4, setup and Case 1 (`J` blocks)
@@ -15,6 +17,8 @@ Lemma 4 (Śliwa pp. 632–635): for `m > 2` and `s ∈ Kₘ,₁`, `‖Tˢ - Tˢ 
 This file: the general facts every case uses (`s < 2bₘ`, `s` is small against `√aₙ` for `n > m`,
 `αˢ ≤ aₘ₊₁`), when `Qₘ fᵢ = 0`, and **Case 1** (`i ∈ Jₙ,ᵣ`).
 -/
+
+@[expose] public section
 
 namespace ReadL1
 
@@ -29,7 +33,7 @@ def InK1 (d : ℕ → ℕ) (m s : ℕ) : Prop :=
 /-- `Qₘ fᵢ = 0` above `(m - 1)aₘ`, unless `i ∈ Iₙ,ₙ₋ₘ`. -/
 lemma qImage_eq_zero {m i : ℕ} (hi : (m - 1) * seqA d m < i)
     (hk : ¬ ((block d i).kind = .I ∧ (block d i).r + m = (block d i).n)) : qImage d m i = 0 := by
-  rw [qImage, if_neg (by omega), if_neg hk]
+  rw [qImage, ite_eq_right (by omega), ite_eq_right hk]
 
 /-- Consecutive weights `k` apart differ by `α^{k/√c}`. -/
 lemma weight_eq_mul_add {c : ℕ} (hc : 0 < c) (r i k : ℕ) :

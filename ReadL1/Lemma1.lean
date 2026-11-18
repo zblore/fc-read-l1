@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Lemma2
+module
+
+public import ReadL1.Lemma2
 
 /-!
 # Śliwa's Lemma 1 (a): the size of `xⁱ`
@@ -19,6 +21,8 @@ by induction on `m`: going from `vₘ` up to `m aₘ₊₁` crosses the `J` and 
 a power at most `vₘ`; on a `K` block with a power at most `m aₘ₊₁`. (The statement holds for
 `m = 1` too, where both ranges are `{0}`.)
 -/
+
+@[expose] public section
 
 namespace ReadL1
 

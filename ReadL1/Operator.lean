@@ -3,8 +3,10 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.L1Lift
-import ReadL1.Lemma2
+module
+
+public import ReadL1.L1Lift
+public import ReadL1.Lemma2
 
 /-!
 # Read's operator on ℓ¹
@@ -15,6 +17,8 @@ gives an operator on all of ℓ¹ with those images (`ReadL1.readOp`), of norm a
 (`ReadL1.norm_readOp_le`). On finite sequences it agrees with `T₀` (`ReadL1.readOp_toL1`), so it
 is still multiplication by `x`.
 -/
+
+@[expose] public section
 
 namespace ReadL1
 

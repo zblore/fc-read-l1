@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Basis
+module
+
+public import ReadL1.Basis
 
 /-!
 # The growth facts
@@ -13,6 +15,8 @@ import ReadL1.Basis
 hypotheses (`ReadL1.GrowthHyp`), extending the three the partition needs. They are proved for an
 explicit sequence at the end.
 -/
+
+@[expose] public section
 
 namespace ReadL1
 

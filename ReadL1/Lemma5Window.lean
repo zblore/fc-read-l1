@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Lemma5Coeff
+module
+
+public import ReadL1.Lemma5Coeff
 
 /-!
 # Tools for Lemma 5: growth facts, truncations, and the coordinate window
@@ -16,6 +18,8 @@ import ReadL1.Lemma5Coeff
   (∑_{vₙ₋₂ < j ≤ vₙ₋₁} |y_{n,j}|) Bₙ₋₁`, from the support facts of `ReadL1.Coord`;
 * `ReadL1.pnorm_ptrunc_fPoly_le`: `|P_{vₙ₋₁} fₗ| ≤ aₙ₋₁` for `vₙ₋₁ < l ≤ (n - 1)aₙ` (p. 638).
 -/
+
+@[expose] public section
 
 namespace ReadL1
 
@@ -74,13 +78,13 @@ lemma truncL1_apply (N : ℕ) (e : L1) (i : ℕ) : truncL1 N e i = if i ≤ N th
 lemma mem_support_truncL1 {N : ℕ} {e : L1} {j : ℕ} (hj : j ∈ (truncL1 N e).support) : j ≤ N := by
   rw [Finsupp.mem_support_iff, truncL1_apply] at hj
   by_contra hjN
-  exact hj (if_neg hjN)
+  exact hj (ite_eq_right hjN)
 
 lemma nrm_truncL1 (N : ℕ) (e : L1) : nrm (truncL1 N e) = ∑ l ∈ Finset.range (N + 1), ‖e l‖ := by
   rw [nrm_eq_sum_of_subset _ (s := Finset.range (N + 1))
     (fun j hj ↦ Finset.mem_range.2 (Nat.lt_succ_of_le (mem_support_truncL1 hj)))]
   exact Finset.sum_congr rfl fun l hl ↦ by
-    rw [truncL1_apply, if_pos (Nat.lt_succ_iff.1 (Finset.mem_range.1 hl))]
+    rw [truncL1_apply, ite_eq_left (Nat.lt_succ_iff.1 (Finset.mem_range.1 hl))]
 
 lemma coeff_fromCoord_truncL1 (N : ℕ) (e : L1) (j : ℕ) :
     (fromCoord d (truncL1 N e)).coeff j =
@@ -128,7 +132,7 @@ lemma pnorm_ptrunc_eq_sum (N : ℕ) (p : ℂ[X]) :
     pnorm (ptrunc N p) = ∑ i ∈ Finset.range (N + 1), ‖p.coeff i‖ := by
   rw [pnorm_eq_sum_of_subset _ (support_subset_range (natDegree_ptrunc_le N p))]
   exact Finset.sum_congr rfl fun i hi ↦ by
-    rw [coeff_ptrunc, if_pos (Nat.lt_succ_iff.1 (Finset.mem_range.1 hi))]
+    rw [coeff_ptrunc, ite_eq_left (Nat.lt_succ_iff.1 (Finset.mem_range.1 hi))]
 
 /- ### The window `(vₙ₋₂, vₙ₋₁]` -/
 
@@ -153,7 +157,7 @@ theorem sum_norm_window_le (h : GrowthHyp d) {n : ℕ} (hn : 2 < n) (e : L1) :
   have hei : ∀ i ∈ W, e i = ∑ j ∈ W, yCoeff d n j e * xPow d j i := by
     intro i hi
     rw [hW, Finset.mem_Ioc] at hi
-    calc e i = truncL1 c e i := by rw [truncL1_apply, if_pos (by omega)]
+    calc e i = truncL1 c e i := by rw [truncL1_apply, ite_eq_left (by omega)]
       _ = toCoord d Y i := by rw [hY]
       _ = ∑ j ∈ Finset.range (c + 1), Y.coeff j * xPow d j i := toCoord_apply_eq_sum hYdeg i
       _ = ∑ j ∈ W, yCoeff d n j e * xPow d j i := by

@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Inverse
+module
+
+public import ReadL1.Inverse
 
 /-!
 # Śliwa's Lemma 6: an approximate inverse with a bounded norm
@@ -17,6 +19,8 @@ of `ReadL1.invPoly` works; if `|y₀| < τ`, apply the inductive hypothesis at `
 `m - 1`.
 -/
 
+@[expose] public section
+
 namespace ReadL1
 
 open Polynomial
@@ -29,7 +33,7 @@ lemma ptrunc_ptrunc {m n : ℕ} (h : m ≤ n) (p : ℂ[X]) : ptrunc m (ptrunc n 
 lemma natDegree_ptrunc_le (n : ℕ) (p : ℂ[X]) : (ptrunc n p).natDegree ≤ n := by
   rw [natDegree_le_iff_coeff_eq_zero]
   intro k hk
-  rw [coeff_ptrunc, if_neg (by exact_mod_cast not_le.2 hk)]
+  rw [coeff_ptrunc, ite_eq_right (by exact_mod_cast not_le.2 hk)]
 
 /-- `Pₙ (q y)` only sees `Pₙ y`. -/
 lemma ptrunc_mul_ptrunc (n : ℕ) (q y : ℂ[X]) : ptrunc n (q * ptrunc n y) = ptrunc n (q * y) := by
@@ -38,7 +42,7 @@ lemma ptrunc_mul_ptrunc (n : ℕ) (q y : ℂ[X]) : ptrunc n (q * ptrunc n y) = p
   split_ifs with hl
   · rw [coeff_mul, coeff_mul]
     refine Finset.sum_congr rfl fun x hx ↦ ?_
-    rw [coeff_ptrunc, if_pos (by have := Finset.HasAntidiagonal.mem_antidiagonal.1 hx; omega)]
+    rw [coeff_ptrunc, ite_eq_left (by have := Finset.HasAntidiagonal.mem_antidiagonal.1 hx; omega)]
   · rfl
 
 lemma natDegree_divX_le_of {p : ℂ[X]} {k : ℕ} (h : p.natDegree ≤ k + 1) :

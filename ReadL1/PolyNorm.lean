@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 # Śliwa's coefficient norm and truncation
@@ -13,6 +15,8 @@ For a polynomial `f = ∑ cᵢ xⁱ`, Śliwa (p. 636) uses the coefficient norm 
 keeping the powers up to `xⁿ` (`ReadL1.ptrunc`), with `x (Pₙ v) = Pₙ₊₁ (x v)`
 (`ReadL1.X_mul_ptrunc`).
 -/
+
+@[expose] public section
 
 namespace ReadL1
 
@@ -70,10 +74,10 @@ lemma coeff_ptrunc (n : ℕ) (p : ℂ[X]) (k : ℕ) :
   rw [ptrunc, finsetSum_coeff]
   simp only [coeff_monomial]
   by_cases hk : k ≤ n
-  · rw [if_pos hk, Finset.sum_eq_single k (fun i _ hik ↦ if_neg hik)
-      (fun h ↦ absurd (Finset.mem_range.2 (by omega)) h), if_pos rfl]
-  · rw [if_neg hk]
-    exact Finset.sum_eq_zero fun i hi ↦ if_neg (by
+  · rw [ite_eq_left hk, Finset.sum_eq_single k (fun i _ hik ↦ ite_eq_right hik)
+      (fun h ↦ absurd (Finset.mem_range.2 (by omega)) h), ite_eq_left rfl]
+  · rw [ite_eq_right hk]
+    exact Finset.sum_eq_zero fun i hi ↦ ite_eq_right (by
       have := Finset.mem_range.1 hi; omega)
 
 /-- `x (Pₙ v) = Pₙ₊₁ (x v)`. -/
@@ -83,8 +87,8 @@ lemma X_mul_ptrunc (n : ℕ) (v : ℂ[X]) : X * ptrunc n v = ptrunc (n + 1) (X *
   · simp [coeff_ptrunc]
   · rw [coeff_X_mul, coeff_ptrunc, coeff_ptrunc, coeff_X_mul]
     by_cases hk : k ≤ n
-    · rw [if_pos hk, if_pos (by omega)]
-    · rw [if_neg hk, if_neg (by omega)]
+    · rw [ite_eq_left hk, ite_eq_left (by omega)]
+    · rw [ite_eq_right hk, ite_eq_right (by omega)]
 
 lemma pnorm_ptrunc_le (n : ℕ) (p : ℂ[X]) : pnorm (ptrunc n p) ≤ pnorm p := by
   classical
@@ -161,7 +165,7 @@ lemma divX_ptrunc (m : ℕ) (p : ℂ[X]) : divX (ptrunc (m + 1) p) = ptrunc m (d
 /-- `|Pₘ₊₁ y| = |y₀| + |Pₘ (divX y)|`. -/
 lemma pnorm_ptrunc_succ (m : ℕ) (p : ℂ[X]) :
     pnorm (ptrunc (m + 1) p) = ‖p.coeff 0‖ + pnorm (ptrunc m (divX p)) := by
-  rw [pnorm_eq_add_divX, divX_ptrunc, coeff_ptrunc, if_pos (Nat.zero_le _)]
+  rw [pnorm_eq_add_divX, divX_ptrunc, coeff_ptrunc, ite_eq_left (Nat.zero_le _)]
 
 lemma pnorm_ptrunc_zero (p : ℂ[X]) : pnorm (ptrunc 0 p) = ‖p.coeff 0‖ := by
   rw [ptrunc, Finset.sum_range_one, pnorm_monomial]

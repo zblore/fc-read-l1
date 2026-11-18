@@ -3,8 +3,10 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Poly
-import ReadL1.Projection
+module
+
+public import ReadL1.Poly
+public import ReadL1.Projection
 
 /-!
 # From coordinates back to polynomials
@@ -20,6 +22,8 @@ Two support facts about the coordinates of `xⁱ`, used in Lemma 5:
 * for `vₙ₋₁ < j ≤ (n - 1)aₙ` they vanish on `(vₙ₋₂, vₙ₋₁]` (`ReadL1.xPow_apply_gap`): the
   recursion on an `I` block steps down by `aₙ` and jumps from `Iₙ,₁` straight below `vₙ₋₂`.
 -/
+
+@[expose] public section
 
 namespace ReadL1
 
@@ -44,22 +48,22 @@ lemma fPoly_zero : fPoly d 0 = 1 := by simp [fPoly]
 lemma fPoly_of_J (h : PartitionHyp d) {i : ℕ} {B : Block} (hB : B.Mem d i) (hk : B.kind = .J) :
     fPoly d i = C (weight (seqA d B.n) B.r i : ℂ) * X ^ i := by
   have hi := Block.one_le_of_mem h hB
-  rw [fPoly, if_neg (by omega), block_eq h hB]; simp [hk]
+  rw [fPoly, ite_eq_right (by omega), block_eq h hB]; simp [hk]
 
 lemma fPoly_of_I (h : PartitionHyp d) {i : ℕ} {B : Block} (hB : B.Mem d i) (hk : B.kind = .I) :
     fPoly d i = C (seqA d (B.n - B.r) : ℂ) * (X ^ i - X ^ (i - seqA d B.n)) := by
   have hi := Block.one_le_of_mem h hB
-  rw [fPoly, if_neg (by omega), block_eq h hB]; simp [hk]
+  rw [fPoly, ite_eq_right (by omega), block_eq h hB]; simp [hk]
 
 lemma fPoly_of_L (h : PartitionHyp d) {i : ℕ} {B : Block} (hB : B.Mem d i) (hk : B.kind = .L) :
     fPoly d i = C (weight (seqB d B.n) B.r i : ℂ) * X ^ i := by
   have hi := Block.one_le_of_mem h hB
-  rw [fPoly, if_neg (by omega), block_eq h hB]; simp [hk]
+  rw [fPoly, ite_eq_right (by omega), block_eq h hB]; simp [hk]
 
 lemma fPoly_of_K (h : PartitionHyp d) {i : ℕ} {B : Block} (hB : B.Mem d i) (hk : B.kind = .K) :
     fPoly d i = X ^ i - C (seqB d B.n : ℂ) * X ^ (i - seqB d B.n) := by
   have hi := Block.one_le_of_mem h hB
-  rw [fPoly, if_neg (by omega), block_eq h hB]; simp [hk]
+  rw [fPoly, ite_eq_right (by omega), block_eq h hB]; simp [hk]
 
 lemma toCoord_C_mul (c : ℂ) (p : ℂ[X]) : toCoord d (C c * p) = c • toCoord d p := by
   rw [← smul_eq_C_mul, map_smul]
@@ -200,7 +204,7 @@ lemma xPow_apply_gap (h : PartitionHyp d) {n : ℕ} (hn : 2 ≤ n) {i : ℕ}
     dsimp only at hr1 hrn hlo hhi
     rw [xPow_of_I h hB rfl]
     simp only [Finsupp.add_apply, Finsupp.smul_apply, Finsupp.single_apply,
-      if_neg (show ¬ j = i by omega), smul_zero, zero_add]
+      ite_eq_right (show ¬ j = i by omega), smul_zero, zero_add]
     obtain ⟨r', rfl⟩ : ∃ r', r = r' + 1 := ⟨r - 1, by omega⟩
     have hr' : (r' + 1) * seqA d n = r' * seqA d n + seqA d n := add_one_mul _ _
     rcases Nat.eq_zero_or_pos r' with rfl | hr'0

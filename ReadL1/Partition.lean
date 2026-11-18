@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 # Śliwa's partition of the indices
@@ -21,6 +23,8 @@ This file proves that every positive integer lies in exactly one block (`ReadL1.
 `ReadL1.block_unique`). Only three growth facts are used, collected in `ReadL1.PartitionHyp`;
 Śliwa derives them (and more) on p. 628 from his growth condition.
 -/
+
+@[expose] public section
 
 namespace ReadL1
 

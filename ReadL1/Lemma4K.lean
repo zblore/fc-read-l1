@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Lemma4L
+module
+
+public import ReadL1.Lemma4L
 
 /-!
 # Śliwa's Lemma 4, Case 4 (`K` blocks)
@@ -12,6 +14,8 @@ For `i ∈ Kₙ,ᵣ` above `(m - 1)aₘ` (so `n ≥ m`), `Qₘ fᵢ = 0` and `T�
 `j = i + s` (Śliwa p. 635). Either `j` stays in a `K` block and `Tˢ fᵢ = fⱼ` (4.1°, 4.3°), or
 `‖xʲ‖ ≤ 1` and `‖x^{j - bₙ}‖ ≤ 1/bₙ`, so `‖Tˢ fᵢ‖ ≤ 2` (4.2°, 4.4°).
 -/
+
+@[expose] public section
 
 namespace ReadL1
 

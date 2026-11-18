@@ -3,7 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Norm
+module
+
+public import ReadL1.Norm
 
 /-!
 # Śliwa's Lemma 2: the operator is bounded
@@ -17,6 +19,8 @@ In coordinates `fᵢ = δᵢ` and `T fᵢ = shiftImage i`, so the statement is
 `nrm (shiftImage d i) ≤ α`.
 -/
 
+@[expose] public section
+
 namespace ReadL1
 
 open Finsupp
@@ -28,24 +32,24 @@ variable {d : ℕ → ℕ}
 lemma shiftImage_of_J (h : PartitionHyp d) {i : ℕ} {B : Block} (hB : B.Mem d i)
     (hk : B.kind = .J) : shiftImage d i = (weight (seqA d B.n) B.r i : ℂ) • xPow d (i + 1) := by
   have hi := Block.one_le_of_mem h hB
-  rw [shiftImage, if_neg (by omega), block_eq h hB]; simp [hk]
+  rw [shiftImage, ite_eq_right (by omega), block_eq h hB]; simp [hk]
 
 lemma shiftImage_of_L (h : PartitionHyp d) {i : ℕ} {B : Block} (hB : B.Mem d i)
     (hk : B.kind = .L) : shiftImage d i = (weight (seqB d B.n) B.r i : ℂ) • xPow d (i + 1) := by
   have hi := Block.one_le_of_mem h hB
-  rw [shiftImage, if_neg (by omega), block_eq h hB]; simp [hk]
+  rw [shiftImage, ite_eq_right (by omega), block_eq h hB]; simp [hk]
 
 lemma shiftImage_of_I (h : PartitionHyp d) {i : ℕ} {B : Block} (hB : B.Mem d i)
     (hk : B.kind = .I) : shiftImage d i =
       (seqA d (B.n - B.r) : ℂ) • (xPow d (i + 1) - xPow d (i + 1 - seqA d B.n)) := by
   have hi := Block.one_le_of_mem h hB
-  rw [shiftImage, if_neg (by omega), block_eq h hB]; simp [hk]
+  rw [shiftImage, ite_eq_right (by omega), block_eq h hB]; simp [hk]
 
 lemma shiftImage_of_K (h : PartitionHyp d) {i : ℕ} {B : Block} (hB : B.Mem d i)
     (hk : B.kind = .K) : shiftImage d i =
       xPow d (i + 1) - (seqB d B.n : ℂ) • xPow d (i + 1 - seqB d B.n) := by
   have hi := Block.one_le_of_mem h hB
-  rw [shiftImage, if_neg (by omega), block_eq h hB]; simp [hk]
+  rw [shiftImage, ite_eq_right (by omega), block_eq h hB]; simp [hk]
 
 /-! ### Inside a block -/
 
@@ -554,7 +558,7 @@ lemma nrm_shiftImage_zero (h : GrowthHyp d) : nrm (shiftImage d 0) ≤ 1 := by
     refine ⟨le_rfl, by dsimp; omega, ?_, ?_⟩ <;> dsimp only
     · simp [seqV_one]
     · omega
-  rw [shiftImage, if_pos rfl]
+  rw [shiftImage, ite_eq_left rfl]
   refine (nrm_xPow_J_le hP hJ ?_).trans ?_
   · have : (4096 : ℝ) ≤ seqA d 2 := by exact_mod_cast ha
     push_cast; nlinarith

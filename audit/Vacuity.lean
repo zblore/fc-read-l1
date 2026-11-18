@@ -3,7 +3,38 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1
+module
+
+import all ReadL1.Basis
+import all ReadL1.Coord
+import all ReadL1.Cyclic
+import all ReadL1.Defs
+import all ReadL1.Explicit
+import all ReadL1.FormalTarget
+import all ReadL1.Growth
+import all ReadL1.Inverse
+import all ReadL1.L1Lift
+import all ReadL1.Lemma1
+import all ReadL1.Lemma2
+import all ReadL1.Lemma4
+import all ReadL1.Lemma4I
+import all ReadL1.Lemma4J
+import all ReadL1.Lemma4K
+import all ReadL1.Lemma4L
+import all ReadL1.Lemma5
+import all ReadL1.Lemma5Coeff
+import all ReadL1.Lemma5Window
+import all ReadL1.Lemma6
+import all ReadL1.Main
+import all ReadL1.Norm
+import all ReadL1.Operator
+import all ReadL1.Partition
+import all ReadL1.Poly
+import all ReadL1.PolyNorm
+import all ReadL1.Projection
+import all ReadL1.QPoly
+import all ReadL1.Theorem7
+import all ReadL1.Theorem7Prep
 
 /-!
 Audit: every hand-written declaration in `ReadL1`, private ones included, is reachable from the
@@ -81,7 +112,7 @@ end ReadL1Audit
 
 /-- Control: an orphan recursive definition. Its equation lemma (realised below) mentions it, so
 an audit that counted any mention as a use would pass it; this one must report it. -/
-def ReadL1.vacuityControl : ℕ → ℕ
+public def ReadL1.vacuityControl : ℕ → ℕ
   | 0 => 0
   | n + 1 => ReadL1.vacuityControl n
 

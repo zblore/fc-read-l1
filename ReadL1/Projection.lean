@@ -3,8 +3,10 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-import ReadL1.Lemma1
-import ReadL1.Operator
+module
+
+public import ReadL1.Lemma1
+public import ReadL1.Operator
 
 /-!
 # Powers of the operator, and Śliwa's projection `Qₘ`
@@ -19,6 +21,8 @@ Lemma 4 compares `Tˢ` with `Tˢ Qₘ`. This file prepares it:
   `i ∈ Iₙ,ₙ₋ₘ` with `n > m`, and `0` otherwise (`ReadL1.qImage`), with
   `‖Qₘ fᵢ‖ ≤ √Aₘ` (`ReadL1.nrm_qImage_le`).
 -/
+
+@[expose] public section
 
 namespace ReadL1
 
