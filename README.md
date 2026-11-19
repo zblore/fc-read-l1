@@ -50,7 +50,7 @@ Formal Conjectures' `formal_proof` link points at commit `57ceaa0`, the earlier 
 - `scripts/check-fc-match.py` regenerates Challenge's code from Formal Conjectures at the pinned commit and requires an exact match. It pins the source file by SHA-256, and `--self-test` confirms that 22 altered inputs fail: 17 altered Challenge or Defs files, and 5 altered copies of the Formal Conjectures source, which the hash catches. This compares text. Formal Conjectures builds with Lean and Mathlib v4.33.1 and this repository with v4.35.0-rc3, and the script doesn't read what that file imports.
 - `audit/Axioms.lean` uses `#guard_msgs` to require that the main results and key lemmas use only `propext`, `Classical.choice` and `Quot.sound`.
 - `audit/Control.lean` confirms that the audit detects `sorry`, and that the operator is not zero.
-- `audit/Vacuity.lean` checks that every declaration in the `ReadL1` namespace (429 of them) feeds into the headline theorem `ReadL1.invariant_subspace_problem_l1`.
+- `audit/Vacuity.lean` checks that the hand-written declarations in the `ReadL1` namespace (429 of them; it leaves out constructors, recursors, inductive types and the lemmas Lean generates) all feed into the headline theorem `ReadL1.invariant_subspace_problem_l1`. It recognises generated lemmas by name, so `audit/lexical.py` stops a hand-written declaration from using one of those names.
 - `audit/lexical.py` checks the docstrings, imports and formatting.
 - `scripts/verify-comparator.sh` runs `lake comparator` in CI, which replays the proof through Lean's kernel, nanoda and con-ron.
 

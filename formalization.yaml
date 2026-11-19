@@ -30,7 +30,7 @@ sources:
       - "Wiesław Śliwa"
     id: "https://doi.org/10.1216/RMJ-2010-40-2-627"
     type: "paper"
-    location: "Rocky Mountain J. Math. 40 (2010) 627–641, Lemmas 1–6 and Theorem 7"
+    location: "Rocky Mountain J. Math. 40 (2010) 627–641, Lemmas 1, 2 and 4–6, Remark 3 and Theorem 7"
     relationship: "formalizes"
     author_endorsement: "not-contacted"
   - title: "A solution to the invariant subspace problem on the space l1"
@@ -70,19 +70,22 @@ automation:
 review:
   status: "self-assessed"
   notes: >-
-    Checked locally on Windows. The build passes with warnings as errors.
-    audit/Axioms.lean enforces with #guard_msgs that the main results and key lemmas use only
-    propext, Classical.choice and Quot.sound. audit/Control.lean checks that the audit detects
-    sorryAx and that the operator is not zero. audit/Vacuity.lean checks that every declaration in
-    the ReadL1 namespace (429) is reachable from the headline theorem. audit/lexical.py checks
-    docstrings, imports and formatting. scripts/check-fc-match.py regenerates Challenge.lean's code
-    from Formal Conjectures at the pinned commit, requires an exact match and pins the source file
-    by SHA-256; its self-test confirms that 22 altered inputs fail (17 altered Challenge or Defs
-    files, and 5 altered copies of the source, which the hash catches). lake comparator passed
-    locally without the sandbox (Lean's kernel, nanoda and con-ron accept). The sandboxed run in CI
-    (scripts/verify-comparator.sh) and Palomar's preflight run after the push. The check-fc-match
-    comparison is of text: Formal Conjectures builds with Lean and Mathlib v4.33.1 and this
-    repository with v4.35.0-rc3, and the script does not read what that file imports.
+    Checked locally on Windows. lake build --wfail ReadL1 Solution passes (Challenge, whose
+    placeholder sorry warns, is left out). audit/Axioms.lean enforces with #guard_msgs that the main
+    results and key lemmas use only propext, Classical.choice and Quot.sound. audit/Control.lean
+    checks that the audit detects sorryAx and that the operator is not zero. audit/Vacuity.lean
+    checks that the hand-written declarations in the ReadL1 namespace (429; constructors, recursors,
+    inductive types and Lean-generated lemmas are left out) are all reachable from the headline
+    theorem. audit/lexical.py checks docstrings, imports and formatting, and that no hand-written
+    declaration uses a name Vacuity treats as generated. scripts/check-fc-match.py regenerates
+    Challenge.lean's code from Formal Conjectures at the pinned commit, requires an exact match and
+    pins the source file by SHA-256; its self-test confirms that 22 altered inputs fail (17 altered
+    Challenge or Defs files, and 5 altered copies of the source, which the hash catches). lake
+    comparator passed locally without the sandbox (Lean's kernel, nanoda and con-ron accept). CI,
+    with the sandboxed run (scripts/verify-comparator.sh), runs on the push; Palomar's preflight is
+    then started by hand with the full commit. The check-fc-match comparison is of text: Formal
+    Conjectures builds with Lean and Mathlib v4.33.1 and this repository with v4.35.0-rc3, and the
+    script does not read what that file imports.
 
 status:
   scope: >-

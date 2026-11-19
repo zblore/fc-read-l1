@@ -16,8 +16,10 @@ fc = open(os.path.join(root, "Challenge.lean"), encoding="utf-8").read()
 # Read bytes, so CRLF line endings are seen rather than silently converted.
 raw = {f: open(f, "rb").read() for f in files}
 src = {f: b.decode("utf-8") for f, b in raw.items()}
-decl_re = (r"^(?:@\[[^\]]*\]\s*)?(?:noncomputable\s+)?"
-           r"(?:def|lemma|theorem|abbrev|structure)\s+(\S+)")
+# Any order of modifiers, so `private`, `public` and `protected` declarations are seen too.
+decl_re = (r"^(?:@\[[^\]]*\]\s*)?"
+           r"(?:(?:private|public|protected|noncomputable|partial|nonrec|unsafe)\s+)*"
+           r"(?:def|lemma|theorem|abbrev|structure|inductive|class)\s+([^\s:({\[]+)")
 declared = set(re.findall(decl_re, "\n".join(src.values()), re.M))
 declared |= set(re.findall(decl_re, fc, re.M))
 problems = []
@@ -31,11 +33,32 @@ if generated_block is None:
 reserved = set(re.findall(r'"([^"]+)"', generated_block.group(1)))
 if len(reserved) < 10:
     sys.exit(f"lexical audit: only {len(reserved)} reserved suffixes read from Vacuity.lean")
+
+
+def uses_reserved(name):
+    """The rule of Vacuity's `isGenerated`: a reserved or `eq_<n>` last component, or a
+    `match_<n>` component anywhere in the name."""
+    parts = name.split(".")
+    return (parts[-1] in reserved or re.fullmatch(r"eq_\d+", parts[-1]) is not None
+            or any(re.fullmatch(r"match_\d+", c) for c in parts))
+
+
+# Negative controls: each line declares a name Vacuity would skip, so each must be caught.
+controls = [
+    "private def auditBlindSpot.eq_def : Nat := 0",
+    "public theorem a.eq_2 : True := trivial",
+    "@[simp] private noncomputable def b.match_1.foo : Nat := 0",
+    "protected lemma c.rec : True := trivial",
+    "noncomputable def d.splitter := 0",
+]
+for line in controls:
+    names = re.findall(decl_re, line, re.M)
+    if len(names) != 1 or not uses_reserved(names[0]):
+        sys.exit(f"lexical audit: control not caught: {line}")
 for f, s in src.items():
     for name in re.findall(decl_re, s, re.M):
-        last = name.split(".")[-1]
-        if last in reserved or re.fullmatch(r"eq_\d+|match_\d+", last):
-            problems.append(f"{f}: `{name}` uses a suffix reserved for Lean-generated lemmas")
+        if uses_reserved(name):
+            problems.append(f"{f}: `{name}` uses a name reserved for Lean-generated lemmas")
 for f, t in src.items():
     for doc in re.findall(r"/-[-!](.*?)-/", t, re.S):
         for name in re.findall(r"`([A-Za-z_][A-Za-z0-9_'.]*)`", doc):
@@ -67,4 +90,4 @@ for f, t in src.items():
 if problems:
     print("\n".join(problems))
     sys.exit(1)
-print(f"lexical audit clean over {len(files)} files")
+print(f"lexical audit clean over {len(files)} files; {len(controls)} controls caught")
